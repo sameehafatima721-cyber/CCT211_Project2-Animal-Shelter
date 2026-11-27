@@ -37,30 +37,49 @@ class DataManager:
 
     # gives a new id that no other animal is using
     def give_animal_id(self):
-        pass
+        current_id = 0
+        for animal in self.animals:
+            if animal.animal_id > current_id:
+                current_id = animal.animal_id
+        return current_id + 1
 
 
     # adds a new animal, gives it an id, and saves it into the pickle file
     def add_animal(self, animal):
-        pass
+        animal.animal_id = self.give_animal_id()
+        self.animals.append(animal)
+        self.save()
+        return animal
 
 
     # gets back a copy of the list of all animals stored
     def get_all(self):
-        pass
+        return list(self.animals)
 
-  
+
     # finds an animal by its id
     def find_animal(self, animal_id):
-        pass
+        for animal in self.animals:
+            if animal.animal_id == animal_id:
+                return animal
+        return None #returns none if there isnt an animal found
 
 
     # replaces the saved animal that has the same id
     def update_animal(self, updated_animal):
-        pass
+        for i in range(len(self.animals)):
+            if self.animals[i].animal_id == updated_animal.animal_id:
+                self.animals[i] = updated_animal
+                self.save()
+                return True
+        return False
 
 
     # removes the animal with this id
     def delete_animal(self, animal_id):
-        pass
-
+        animal = self.find_animal(animal_id)
+        if animal is None:
+            return False
+        self.animals.remove(animal)
+        self.save()
+        return True 
